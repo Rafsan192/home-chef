@@ -1,0 +1,205 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+    <div class="modal fade" id="courseEnrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Course Enrollment</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" id="enroll_form">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="course">Course Title</label>
+                            <input type="text" name="title" id="title" class="form-control shadow-none border border-2"
+                                   disabled
+                                   value="">
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <div class="form-group mb-3 w-100">
+                                <label for="banking">Mobile Banking</label>
+                                <select name="banking" id="banking" class="form-control shadow-none border border-2"
+                                        required>
+                                    <option value="Bkash">Bkash</option>
+                                    <option value="Rocket">Rocket</option>
+                                    <option value="Nagad">Nagad</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3 w-100">
+                                <label for="phone">Phone No</label>
+                                <input type="text" name="phone" class="form-control shadow-none border border-2"
+                                       placeholder="Phone No" required>
+                            </div>
+                            <div class="form-group mb-3 w-100">
+                                <label for="txn_id">TxnID</label>
+                                <input type="text" name="txn_id" class="form-control shadow-none border border-2"
+                                       placeholder="Transaction ID" required>
+                            </div>
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            {% if user.is_authenticated %}
+                                <input type="submit" value="Enroll Now"
+                                       class="btn btn-dark border-2 btn-sm shadow-none">
+                            {% else %}
+                                <span class="text-danger ms-2"><i class="fa-solid fa-triangle-exclamation"></i> Login Required</span>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="row container my-5 mx-auto g-5">
+        <div class="col-8">
+            <img src="{{ course.cover.url }}" alt="{{ course.title }}" class="w-100 play-button">
+            <h4 class="mt-3">{{ course.title }}</h4>
+            <p class="mt-3">{{ course.description }}</p>
+            <h4 class="mt-5">Course Module</h4>
+            <div class="mt-3">
+                {% if is_enrolled.status == True %}
+                <table class="fs-5 table border-white border-3">
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-1</td>
+                        <td>
+                            <p>{{ course.module.week_1 }}</p>
+                            <p>{{ course.module.detail_1 }}</p>
+                        </td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-2</td>
+                       <td>
+                            <p>{{ course.module.week_2 }}</p>
+                            <p>{{ course.module.detail_2 }}</p>
+                        </td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-3</td>
+                        <td>
+                            <p>{{ course.module.week_3 }}</p>
+                            <p>{{ course.module.detail_3 }}</p>
+                        </td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-4</td>
+                        <td>
+                            <p>{{ course.module.week_4 }}</p>
+                            <p>{{ course.module.detail_4 }}</p>
+                        </td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-5</td>
+                        <td>
+                            <p>{{ course.module.week_5 }}</p>
+                            <p>{{ course.module.detail_5 }}</p>
+                        </td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-6</td>
+                        <td>
+                            <p>{{ course.module.week_6 }}</p>
+                            <p>{{ course.module.detail_6 }}</p>
+                        </td>
+                    </tr>
+                </table>
+                {% else %}
+                <table class="fs-5 table border-white border-3">
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-1</td>
+                        <td class="d-flex justify-content-between">{{ course.module.week_1 }} <span class="text-primary">Enroll to unlock</span></td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-2</td>
+                        <td class="d-flex justify-content-between">{{ course.module.week_2 }} <span class="text-primary">Enroll to unlock</span></td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-3</td>
+                        <td class="d-flex justify-content-between">{{ course.module.week_3}} <span class="text-primary">Enroll to unlock</span></td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-4</td>
+                        <td class="d-flex justify-content-between">{{ course.module.week_4}} <span class="text-primary">Enroll to unlock</span></td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-5</td>
+                        <td class="d-flex justify-content-between">{{ course.module.week_5 }}<span class="text-primary">Enroll to unlock</span></td>
+                    </tr>
+                    <tr class="bg-light rounded rounded-5">
+                        <td>Week-6</td>
+                        <td class="d-flex justify-content-between">{{ course.module.week_6 }}<span class="text-primary">Enroll to unlock</span></td>
+                    </tr>
+                </table>
+                {% endif %}
+            </div>
+            <div class="container text-center my-5 ratio ratio-16x9">
+                <iframe src="{{ course.module.video_link }}" title="{{ course.title }}"
+                        allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-4">
+            <div>
+                <p class="text-center fs-5">About Mentor</p>
+                <div class="text-center fs-4">
+                    <img src="{{ course.mentor.profile.cover.url }}" alt="{{ course.mentor.name }}"
+                         class="rounded-circle" width="200" height="200">
+                    <p class="mb-0 mt-3">{{ course.mentor.username }}</p>
+                    <p class="mb-0">{{ course.mentor.email }}</p>
+                </div>
+                <table class="fs-5 table mt-5">
+                    <tr>
+                        <td>Total Hours</td>
+                        <td>&nbsp;&nbsp;{% widthratio course.duration 1 course.total_class as temp %} Hours</td>
+                    </tr>
+                    <tr>
+                        <td>Total Days</td>
+                        <td>&nbsp;&nbsp;{% widthratio temp 1 2 %} Days</td>
+                    </tr>
+                    <tr>
+                        <td>Total Enrolled</td>
+                        <td>&nbsp;&nbsp;{{ total_enrolled }}</td>
+                    </tr>
+                </table>
+
+                <div class="mt-3">
+                    {% if is_enrolled.status == True %}
+                        <button class="btn btn-success btn-lg w-100" disabled>Enrolled</button>
+                    {% elif is_enrolled.status == False %}
+                        <button class="btn btn-success btn-lg w-100" disabled>In Progress</button>
+                    {% else %}
+                        <button
+                                class="btn btn-dark btn-lg w-100"
+                                data-bs-toggle="modal"
+                                data-course-id={{ course.id }}
+                                        data-course-title={{ course.title.split|join:"_" }}
+                                data-bs-target="#courseEnrollModal">Enroll
+                            at {{ course.price }} BDT
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+    </section>
+{% endblock %}
+{% block js %}
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+            crossorigin="anonymous">
+    </script>
+    <script>
+        $("#courseEnrollModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("course-id");
+            const title = button.data("course-title").replace(/_+/g, ' ');
+            const modal = $(this);
+            modal.find("#title").attr("value", title)
+            modal.find("#enroll_form").attr("action", "/enroll/?course_id=" + id)
+        })
+    </script>
+{% endblock %}

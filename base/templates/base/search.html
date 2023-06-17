@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Search Result{% endblock %}
+{% block content %}
+    <div class="container">
+        <p>Result for {{ query }}:</p>
+        {% if chefs %}
+            <div class="mt-5">
+            <h5>Chefs:</h5>
+            {% for chef in chefs %}
+                    <div class="row row-cols-1 row-cols-md-2 g-5 d-flex align-items-center">
+                        <div class="col-md-4 col-12">
+                            <img src="{{ chef.profile.cover.url }}" alt="{{ chef.user.username }}" class="w-50px">
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <h3>{{ chef.first_name }} {{ chef.last_name }}</h3>
+                            <small>by {{ chef.profile.restaurant }}</small>
+                            <a href="{% url 'profile' %}?user_id={{ chef.id }}"></a>
+                        </div>
+                    </div>
+                {% endfor %}
+        {% endif %}
+        {% if blogs %}
+            <div class="mt-5">
+                <h5>Blogs:</h5>
+                {% for blog in blogs %}
+                    <div class="row row-cols-1 row-cols-md-2 g-5 d-flex align-items-center">
+                        <div class="col-md-4 col-12">
+                            <img src="{{ blog.cover.url }}" alt="{{ blog.title }}" class="w-100">
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <h3>{{ blog.title }}</h3>
+                            <small>by {{ blog.writer.username }}</small>
+                            <br><br>
+                            <h6 class="fw-bold">Description</h6>
+                            <p>{{ blog.content }}</p>
+                            <a href="{% if blog %}{% url 'blog' %}?blog_id={{ blog.id }}{% endif %}"
+                               class="btn btn-sm btn-dark">Read more</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if courses %}
+            <div class="mt-4">
+                <h4>Courses</h4>
+                {% for course in courses %}
+                    <div class="row row-cols-1 row-cols-md-2">
+                        <div class="col-md-4 col-12">
+                            <img src="{{ course.cover.url }}" alt="{{ course.title }}" class="w-100">
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <h3>{{ course.title }}</h3>
+                            <small>by {{ course.mentor.username }}</small>
+                            <br><br>
+                            <h6 class="fw-bold">Description</h6>
+                            <p>{{ course.description }}</p>
+                            <a href="{% if course %}{% url 'course' %}?course_id={{ course.id }}{% endif %}"
+                               class="btn btn-sm btn-dark">Read more</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        </div>
+{% endblock %}

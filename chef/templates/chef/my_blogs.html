@@ -1,0 +1,171 @@
+{% extends 'main.html' %}
+{% block title %}My Blogs{% endblock %}
+{% block content %}
+    <!-- Add Blog Modal -->
+    <div class="modal fade" id="addBlogModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new Blog</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="">Blog Title</label>
+                            <input type="text" name="title" class="form-control shadow-none border border-2">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="">Blog Cover</label>
+                            <input type="file" name="cover" class="form-control shadow-none border border-2">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="">Blog Content</label>
+                            <textarea name="content" id=""
+                                      class="form-control shadow-none border border-2"></textarea>
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Save Blog" class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Blog Modal -->
+    <div class="modal fade" id="updateBlogModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Blog</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" enctype="multipart/form-data" id="update_blog">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="title">Blog Title</label>
+                            <input type="text" name="title" id="title" class="form-control shadow-none border border-2">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="cover">Blog Cover</label>
+                            <input type="file" name="cover" class="form-control shadow-none border border-2">
+                            <small>Current Cover: <a href="" target="_blank" id="cover"></a></small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="description">Blog Content</label>
+                            <textarea name="content" id="content"
+                                      class="form-control shadow-none border border-2"></textarea>
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Update Blog" class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Blog Modal -->
+    <div class="modal fade" id="deleteBlogModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 my-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <br>
+                <i class="fa-solid fa-xmark text-danger mt-3 fa-2xl"></i>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel">Confirm delete this Blog?</h5>
+                </div>
+                <div class="p-3 w-100 text-end">
+                    <button class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                            data-bs-dismiss="modal" aria-label="Close">Discard
+                    </button>
+                    <a href="" id="delete_blog" class="btn btn-danger border-2 border-danger btn-sm shadow-none">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6>All Blogs</h6>
+            <button class="btn btn-sm btn-dark shadow-none border-0" data-bs-toggle="modal"
+                    data-bs-target="#addBlogModal">Add New
+            </button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Content</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for blog in blogs %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="{% url 'blog'%}?blog_id={{blog.id}}" target="_blank" class="text-dark">{{ blog.title }}</a></td>
+                    <td>{{ blog.content|slice:80 }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-white border-2 border-dark shadow-none"
+                                data-blog-id="{{ blog.id }}"
+                                data-blog-title="{{ blog.title }}"
+                                data-blog-cover="{{ blog.cover.url }}"
+                                data-blog-content="{{ blog.content }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#updateBlogModal"
+                        ><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-dark border-2 border-dark shadow-none" data-bs-toggle="modal"
+                                data-bs-target="#deleteBlogModal"
+                                data-blog-id="{{ blog.id }}">
+                                <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+        $("#updateBlogModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("blog-id"); // Extract info from data-* attributes
+            const title = button.data("blog-title");
+            const cover = button.data("blog-cover");
+            const content = button.data("blog-content");
+
+            const modal = $(this);
+            modal.find("#title").attr("value", title);
+            document.getElementById('content').innerText = content;
+            modal.find("#cover").attr("href", cover);
+            document.getElementById('cover').innerText = cover
+            modal.find("#update_blog").attr("action", "/chef/update-blog/?blog_id=" + id);
+        });
+    </script>
+        <script>
+        $("#deleteBlogModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("blog-id");
+            const modal = $(this);
+            modal.find("#delete_blog").attr("href", "/chef/delete-blog/?blog_id=" + id)})
+        </script>
+{% endblock %}

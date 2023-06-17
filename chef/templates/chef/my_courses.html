@@ -1,0 +1,345 @@
+{% extends 'main.html' %}
+{% block title %}My Courses{% endblock %}
+{% block content %}
+    <!-- Add Course Modal -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new course</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="">Course Title</label>
+                            <input type="text" name="title" class="form-control shadow-none border border-2">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Course Cover</label>
+                            <input type="file" name="cover" class="form-control shadow-none border border-2">
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div class="form-group mb-3">
+                                <label for="">Duration</label>
+                                <input type="number" name="duration" class="form-control shadow-none border border-2">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="">Total Class</label>
+                                <input type="number" name="total_class"
+                                       class="form-control shadow-none border border-2">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="">Price</label>
+                                <input type="number" name="price" class="form-control shadow-none border border-2">
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Course Description</label>
+                            <textarea name="description" id=""
+                                      class="form-control shadow-none border border-2"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_1">Week 1</label>
+                            <input type="text" name="week_1" id="week_1"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_1" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_2">Week 2</label>
+                            <input type="text" name="week_2" id="week_2"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_2" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_3">Week 3</label>
+                            <input type="text" name="week_3" id="week_3"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_3" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_4">Week 4</label>
+                            <input type="text" name="week_4" id="week_4"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_4" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_5">Week 5</label>
+                            <input type="text" name="week_5" id="week_5"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_5" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_6">Week 6</label>
+                            <input type="text" name="week_6" id="week_6"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_6" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="video_link">Video Link</label>
+                            <input type="text" name="video_link" class="form-control shadow-none border border-2">
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Save Course" class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Course Modal -->
+    <div class="modal fade" id="updateCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Update course</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" enctype="multipart/form-data" id="update_course">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="title">Course Title</label>
+                            <input type="text" name="title" id="title" class="form-control shadow-none border border-2">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="cover">Course Cover</label>
+                            <input type="file" name="cover" class="form-control shadow-none border border-2">
+                            <small>Current Cover: <a href="" target="_blank" id="cover"></a></small>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div class="form-group mb-3">
+                                <label for="duration">Duration</label>
+                                <input type="number" id="duration" name="duration"
+                                       class="form-control shadow-none border border-2">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="total_class">Total Class</label>
+                                <input type="number" name="total_class" id="total_class"
+                                       class="form-control shadow-none border border-2">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="price">Price</label>
+                                <input type="number" id="price" name="price"
+                                       class="form-control shadow-none border border-2">
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="description">Course Description</label>
+                            <textarea name="description" id="description"
+                                      class="form-control shadow-none border border-2"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_1">Week 1</label>
+                            <input type="text" name="week_1" id="week_1"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_1" id="detail_1" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_2">Week 2</label>
+                            <input type="text" name="week_2" id="week_2"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_2" id="detail_2" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_3">Week 3</label>
+                            <input type="text" name="week_3" id="week_3"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_3" id="detail_3" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_4">Week 4</label>
+                            <input type="text" name="week_4" id="week_4"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_4" id="detail_4" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_5">Week 5</label>
+                            <input type="text" name="week_5" id="week_5"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_5" id="detail_5" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="week_6">Week 6</label>
+                            <input type="text" name="week_6" id="week_6"
+                                   class="form-control shadow-none border border-2">
+                            <textarea name="detail_6" id="detail_6" cols="30" rows="10"
+                                      class="form-control mt-3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="video_link">Video Link</label>
+                            <input type="text" name="video_link" id="video_link"
+                                   class="form-control shadow-none border border-2">
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Update Course" class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Course Modal -->
+    <div class="modal fade" id="deleteCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 my-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <br>
+                <i class="fa-solid fa-xmark text-danger mt-3 fa-2xl"></i>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel">Confirm delete this course?</h5>
+                </div>
+                <div class="p-3 w-100 text-end">
+                    <button class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                            data-bs-dismiss="modal" aria-label="Close">Discard
+                    </button>
+                    <a href="" id="delete_course" class="btn btn-danger border-2 border-danger btn-sm shadow-none">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6>All Courses</h6>
+            <button class="btn btn-sm btn-dark shadow-none border-0" data-bs-toggle="modal"
+                    data-bs-target="#addCourseModal">Add New
+            </button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Total CLass</th>
+                <th scope="col">Price</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for course in courses %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="{% url 'course' %}?course_id={{ course.id }}" target="_blank"
+                           class="text-dark">{{ course.title }}</a></td>
+                    <td>{{ course.duration }}</td>
+                    <td>{{ course.total_class }}</td>
+                    <td>{{ course.price }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-white border-2 border-dark shadow-none"
+                                data-course-id="{{ course.id }}"
+                                data-course-title="{{ course.title }}"
+                                data-course-cover="{{ course.cover.url }}"
+                                data-course-duration="{{ course.duration }}"
+                                data-course-description="{{ course.description }}"
+                                data-course-class="{{ course.total_class }}"
+                                data-course-price="{{ course.price }}"
+                                data-week_1="{{ course.module.week_1 }}"
+                                data-week_2="{{ course.module.week_2 }}"
+                                data-week_3="{{ course.module.week_3 }}"
+                                data-week_4="{{ course.module.week_4 }}"
+                                data-week_5="{{ course.module.week_5 }}"
+                                data-week_6="{{ course.module.week_6 }}"
+                                data-detail_1="{{ course.module.detail_1 }}"
+                                data-detail_2="{{ course.module.detail_2 }}"
+                                data-detail_3="{{ course.module.detail_3 }}"
+                                data-detail_4="{{ course.module.detail_4 }}"
+                                data-detail_5="{{ course.module.detail_5 }}"
+                                data-detail_6="{{ course.module.detail_6 }}"
+                                data-video_link="{{ course.module.video_link }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#updateCourseModal"
+                        ><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-dark border-2 border-dark shadow-none" data-bs-toggle="modal"
+                                data-bs-target="#deleteCourseModal"
+                                data-course-id="{{ course.id }}">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+        $("#updateCourseModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("course-id"); // Extract info from data-* attributes
+            const title = button.data("course-title");
+            const cover = button.data("course-cover");
+            const description = button.data("course-description");
+            const duration = button.data("course-duration");
+            const total_class = button.data("course-class");
+            const price = button.data("course-price");
+            const week_1 = button.data("week_1");
+            const week_2 = button.data("week_2");
+            const week_3 = button.data("week_3");
+            const week_4 = button.data("week_4");
+            const week_5 = button.data("week_5");
+            const week_6 = button.data("week_6");
+            const detail_1 = button.data("detail_1");
+            const detail_2 = button.data("detail_2");
+            const detail_3 = button.data("detail_3");
+            const detail_4 = button.data("detail_4");
+            const detail_5 = button.data("detail_5");
+            const detail_6 = button.data("detail_6");
+            const video_link = button.data("video_link");
+            const modal = $(this);
+            modal.find("#title").attr("value", title);
+            modal.find("#duration").attr("value", duration);
+            document.getElementById('description').innerText = description;
+            modal.find("#total_class").attr("value", total_class);
+            modal.find("#cover").attr("href", cover);
+            document.getElementById('cover').innerText = cover
+            modal.find("#price").attr("value", price);
+            modal.find("#week_1").attr("value", week_1);
+            modal.find("#week_2").attr("value", week_2);
+            modal.find("#week_3").attr("value", week_3);
+            modal.find("#week_4").attr("value", week_4);
+            modal.find("#week_5").attr("value", week_5);
+            modal.find("#week_6").attr("value", week_6);
+            modal.find("#detail_1")[0].innerText=detail_1;
+            modal.find("#detail_2")[0].innerText=detail_2;
+            modal.find("#detail_3")[0].innerText=detail_3;
+            modal.find("#detail_4")[0].innerText=detail_4;
+            modal.find("#detail_5")[0].innerText=detail_5;
+            modal.find("#detail_6")[0].innerText=detail_6;
+            modal.find("#video_link").attr("value", video_link);
+            modal.find("#update_course").attr("action", "/chef/update-course/?course_id=" + id);
+        });
+    </script>
+    <script>
+        $("#deleteCourseModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("course-id");
+            const modal = $(this);
+            modal.find("#delete_course").attr("href", "/chef/delete-course/?course_id=" + id)
+        })
+    </script>
+{% endblock %}

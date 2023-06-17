@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Blogs{% endblock %}
+{% block content %}
+    <section class="bg-light">
+        <div class="container py-5">
+            <h1 class="text-center mb-5">Our Health Blog</h1>
+            <div class="row row-cols-2 row-cols-md-4">
+                {% for blog in blogs %}
+                    <div class="col">
+                        <div class="bg-white border">
+                            <img src="{{ blog.cover.url }}" alt="{{ blog.title }}" width="100%">
+                            <h5 class="my-2 p-2">{{ blog.title }}</h5>
+                            <div class="d-flex justify-content-between p-2">
+                                    <span class="">By <a href="{% url 'profile' %}?user_id={{ blog.writer.id }}">{{ blog.writer.username }}</a></span>
+                                <div class="d-flex align-items-center">
+                                    <a href="/blog/?blog_id={{ blog.id }}" class="btn btn-warning border-0 shadow-none btn-sm">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

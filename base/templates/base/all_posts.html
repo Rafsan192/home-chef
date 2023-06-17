@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Entertainment{% endblock %}
+{% block content %}
+    <section class="bg-light">
+        <div class="container py-5">
+            <h1 class="text-center mb-5">Entertainment</h1>
+            <div class="row row-cols-2 row-cols-md-4">
+                {% for post in posts %}
+                    <div>
+                    <iframe width="100%" height="180" src="{{ post.url }}" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
+                    {% if request.user.is_superuser %}
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block js %}
+{% endblock %}

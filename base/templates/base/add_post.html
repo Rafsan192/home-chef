@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Add Vlog{% endblock %}
+{% block content %}
+    <section class="bg-light">
+        <div class="container py-5">
+            <h1 class="text-center mb-5">Add Vlog</h1>
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="url" id="url" class="form-control mb-3" placeholder="url">
+                <input type="submit" value="Add" class="btn btn-danger w-100">
+            </form>
+        </div>
+    </section>
+{% endblock %}
+{% block js %}
+{% endblock %}

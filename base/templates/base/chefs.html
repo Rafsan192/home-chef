@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Blogs{% endblock %}
+{% block content %}
+    <section class="bg-light">
+        <div class="container py-5">
+            <h1 class="text-center mb-5">Our Chefs</h1>
+            <div class="row row-cols-2 row-cols-md-4">
+                {% for chef in chefs %}
+                    <div class="col">
+                        <div class="bg-white border">
+                            <img {% if chef.profile.cover %}
+                                src="{{ chef.profile.cover.url }}"
+                            {% else %}
+                                src="{% static 'images/profile.png' %}"
+                            {% endif %} alt="{{ chef.username }}" width="100%">
+                            <h5 class="my-2 p-2"><a href="{% url 'profile' %}?user_id={{ chef.id }}">{{ chef.username }}</a></h5>
+                            <div class="d-flex justify-content-between p-2">
+                                <span class="">From {{ chef.profile.restaurant }}</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a
+                                            href="{% url 'chef_blogs' %}?chef_id={{ chef.id }}"
+                                            class="btn btn-warning border-0 shadow-none btn-sm">Blogs</a>
+                                    <a
+                                            href="{% url 'chef_courses' %}?chef_id={{ chef.id }}"
+                                            class="btn btn-warning border-0 shadow-none btn-sm">Courses</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

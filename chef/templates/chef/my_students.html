@@ -1,0 +1,152 @@
+{% extends 'main.html' %}
+{% block title %}My Students{% endblock %}
+{% block content %}
+
+    <!-- Update Enrollment Modal -->
+    <div class="modal fade" id="updateEnrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Enrollment</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" id="enrollment_form">
+                        {% csrf_token %}
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <div class="form-group mb-3 w-100">
+                                <label for="banking">Mobile Banking</label>
+                                <select
+                                        name="banking"
+                                        id="banking"
+                                        class="form-control shadow-none border border-2"
+                                >
+                                    <option value="Bkash">Bkash</option>
+                                    <option value="Rocket">Rocket</option>
+                                    <option value="Nagad">Nagad</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3 w-100">
+                                <label for="phone">Phone No</label>
+                                <input type="text" name="phone" id="phone" class="form-control shadow-none border border-2"
+                                       placeholder="Phone No">
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <div class="form-group mb-3 w-100">
+                                <label for="txn_id">TxnID</label>
+                                <input type="text" name="txn_id" id="txn_id" class="form-control shadow-none border border-2"
+                                       placeholder="Transaction ID">
+                            </div>
+                            <div class="form-group w-100">
+                                <input class="form-check-input shadow-none"
+                                       type="checkbox"
+                                       id="status"
+                                       name="status"
+                                >
+                                <label class="form-check-label" for="status">
+                                    Approved
+                                </label>
+                            </div>
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Update Enrollment"
+                                   class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6>All Students</h6>
+            <button class="btn btn-sm btn-dark shadow-none border-0" data-bs-toggle="modal"
+                    data-bs-target="#addStudentModal">Add New
+            </button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Course</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Banking</th>
+                <th scope="col">TxnID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for enroll in enrolls %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ enroll.course.title }}</td>
+                    <td>{% if enroll.student.email %}
+                        {{ enroll.student.email }}
+                    {% else %}
+                        <td>Not Added Yet</td>
+                    {% endif %}
+                    </td>
+                    <td>{{ enroll.phone }}</td>
+                    <td>{{ enroll.banking }}</td>
+                    <td>{{ enroll.txn_id }}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            {% if enroll.status %}
+                                <div style="width: 10px; height: 10px" class="bg-success rounded-circle"></div>
+                                <p class="my-0 ms-2">Approved</p>
+                            {% else %}
+                                <div style="width: 10px; height: 10px" class="bg-warning rounded-circle"></div>
+                                <p class="my-0 ms-2">Not Approved</p>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-white border-2 border-dark shadow-none"
+                                data-enroll-id="{{ enroll.id }}"
+                                data-enroll-phone="{{ enroll.phone }}"
+                                data-enroll-banking="{{ enroll.banking }}"
+                                data-enroll-status="{{ enroll.status }}"
+                                data-enroll-txnid="{{ enroll.txn_id }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#updateEnrollModal"
+                        ><i class="fa-solid fa-pencil"></i></button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+        $("#updateEnrollModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("enroll-id"); // Extract info from data-* attributes
+            const phone = button.data("enroll-phone");
+            const banking = button.data("enroll-banking");
+            const status = button.data("enroll-status");
+            const txn_id = button.data("enroll-txnid");
+            const modal = $(this);
+            modal.find("#phone").attr("value", phone);
+            document.getElementById('banking').value=banking
+            modal.find("#txn_id").attr("value", txn_id);
+            const check = document.getElementById('status')
+            if(status=='True') {
+                check.checked = true
+            }
+            else {
+                check.checked = false
+            }
+            modal.find("#enrollment_form").attr("action", "/chef/update-enrollment/?enroll_id=" + id);
+        });
+    </script>
+{% endblock %}

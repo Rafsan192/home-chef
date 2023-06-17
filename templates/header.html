@@ -1,0 +1,170 @@
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+               href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+            <div class="modal-header border-0 mx-auto m-0 p-0">
+                <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            </div>
+            <div class="p-3">
+                <form action="{% url 'login_view' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control shadow-none border border-2"
+                               placeholder="Username" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control shadow-none border border-2"
+                               placeholder="Password" required>
+                    </div>
+
+                    <div class="w-100 text-end">
+                        <input type="button"
+                               class="btn btn-white btn-sm shadow-none  border border-dark border-2 me-2"
+                               data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                        <input type="submit" value="Login" class="btn btn-dark border-2 btn-sm shadow-none">
+                    </div>
+                </form>
+                <div class="d-flex align-items-center justify-content-between mt-2">
+                    <div>
+                        Not a member?
+                        <button data-bs-toggle="modal"
+                                data-bs-target="#registerModal"
+                                class="text-dark text-decoration-underline btn shadow-none border-0">Register
+                        </button>
+                    </div>
+                    <a href="" class="text-dark">Forget Password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+               href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+            <div class="modal-header border-0 mx-auto m-0 p-0">
+                <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+            </div>
+            <div class="p-3">
+                <form action="{% url 'register_view' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control shadow-none border border-2"
+                               placeholder="Username" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" class="form-control shadow-none border border-2"
+                               placeholder="Email" required
+                               pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$">
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <div class="form-group mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control shadow-none border border-2"
+                                   placeholder="Password" minlength="8" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" name="confirm_password"
+                                   class="form-control shadow-none border border-2"
+                                   placeholder="Confirm Password" minlength="8" required>
+                        </div>
+                    </div>
+                    <div class="w-100 text-end">
+                        <input type="button"
+                               class="btn btn-white btn-sm shadow-none  border border-dark border-2 me-2"
+                               data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                        <input type="submit" value="Register" class="btn btn-dark border-2 btn-sm shadow-none">
+                    </div>
+                </form>
+                <div>
+                    <div>
+                        Already a member?
+                        <button data-bs-toggle="modal"
+                                data-bs-target="#loginModal"
+                                class="text-dark text-decoration-underline btn shadow-none border-0">Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container py-2">
+        <a class="navbar-brand fs-2" style="font-family: 'Oleo Script Swash Caps', cursive;" href="/"><i
+                class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}?user_id={{ request.user.id }}">Profile</a>
+                            </li>
+                            {% if user.profile.role != 'student' %}
+                                <li><a class="dropdown-item" href="{% url 'my_courses' %}">My Courses</a></li>
+                                <li><a class="dropdown-item" href="{% url 'my_blogs' %}">My Blogs</a></li>
+                                <li><a class="dropdown-item" href="{% url 'my_students' %}">My Students</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'my_enrolls' %}">My Enrolls</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'all_courses' %}">Course</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'all_blogs' %}">Blogs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'chefs' %}" class="nav-link text-dark">All Chefs</a></li>
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'all_chefs' %}">Chefs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'all_students' %}">Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'add_post' %}">Add Vlog</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'all_posts' %}">Entertainment</a>
+                </li>
+                {% if user.is_anonymous %}
+                    <li class="nav-item">
+                        <button data-bs-toggle="modal"
+                                data-bs-target="#loginModal"
+                                class="nav-link text-white shadow-none border-0 btn btn-dark">Login
+                        </button>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

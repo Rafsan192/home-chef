@@ -1,0 +1,47 @@
+<!-- Course Enroll Modal -->
+<div class="modal fade" id="EnrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+               href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+            <div class="modal-header border-0 mx-auto m-0 p-0">
+                <h5 class="modal-title" id="exampleModalLabel">Course Enrollment</h5>
+            </div>
+            <div class="p-3">
+                <form action="" method="post" id="enroll_form">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="course">Course Title</label>
+                        <input type="text" name="course" class="form-control shadow-none border border-2 disabled"
+                               value="{{ course.name }}">
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <div class="form-group mb-3 w-100">
+                            <label for="banking">Mobile Banking</label>
+                            <select name="banking" id="banking" class="form-control shadow-none border border-2">
+                                <option value="Bkash">Bkash</option>
+                                <option value="Rocket">Rocket</option>
+                                <option value="Nagad">Nagad</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 w-100">
+                            <label for="txn_id">TxnID</label>
+                            <input type="text" name="txn_id" class="form-control shadow-none border border-2"
+                                   placeholder="Transaction ID">
+                        </div>
+                    </div>
+                    <div class="w-100 text-end">
+                        <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                               data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                        {% if user.is_authenticated %}
+                            <input type="submit" value="Enroll Now" class="btn btn-dark border-2 btn-sm shadow-none">
+                        {% else %}
+                            <span class="text-danger ms-2"><i class="fa-solid fa-triangle-exclamation"></i> Login Required</span>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

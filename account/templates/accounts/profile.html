@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+{% block title %} Profile {% endblock title %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Profile</h4>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{% if photo %} {{photo}} {% else %} {% static 'images/profile.png' %} {% endif %}"
+                        class="img-fluid rounded-circle" style="width:200px" alt="profile image">
+                    <h4 class="card-title mt-4">{{ username }}</h4>
+                    {% if id == request.user.id %}
+                    <a href="{% url 'update_profile' %}" class="btn btn-primary">Update Profile</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4>About</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title mb-2">First Name: {{ first_name }}</h5>
+                    <h5 class="card-title mb-2">Last Name: {{ last_name }}</h5>
+                    <h5 class="card-title mb-2">Role: {{ role }}</h5>
+                    <h5 class="card-title">Email: {{ email }}</h5>
+                    {% if restaurant %}
+                    <h5 class="card-title mt-2">Restaurant: {{ restaurant }}</h5>
+                    {% endif %}
+                </div>
+            </div>
+        <div class="card">
+                <div class="card-header">
+                    <h4>Bio</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ bio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div></div>
+    {% endblock content %}

@@ -1,0 +1,181 @@
+{% extends 'main.html' %}
+{% block title %}All Students{% endblock %}
+{% block content %}
+    <!-- Add Student Modal -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new student</h5>
+                </div>
+                <div class="p-3">
+                    <form action="{% url 'add_student' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="username">Student's Username</label>
+                            <input type="text" name="username" class="form-control shadow-none border border-2"
+                                   placeholder="Username" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email">Student's Email</label>
+                            <input type="email" name="email" class="form-control shadow-none border border-2"
+                                   placeholder="Email" required
+                                   pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <div class="form-group mb-3">
+                                <label for="password">Password</label>
+                                <input type="password" name="password" class="form-control shadow-none border border-2"
+                                       placeholder="Password" minlength="8" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="confirm_password">Confirm Password</label>
+                                <input type="password" name="confirm_password"
+                                       class="form-control shadow-none border border-2"
+                                       placeholder="Confirm Password" minlength="8" required>
+                            </div>
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button"
+                                   class="btn btn-white btn-sm shadow-none  border border-dark border-2 me-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Register" class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Student Modal -->
+    <div class="modal fade" id="updateStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 mt-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Student</h5>
+                </div>
+                <div class="p-3">
+                    <form action="" method="post" enctype="multipart/form-data" id="update_student">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="username">Student's Username</label>
+                            <input type="text" name="username" id="username" class="form-control shadow-none border border-2"
+                                   placeholder="Username" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email">Student's Email</label>
+                            <input type="email" name="email" id="email" class="form-control shadow-none border border-2"
+                                   placeholder="Email" required
+                                   pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$">
+                        </div>
+                        <div class="w-100 text-end">
+                            <input type="button" class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                                   data-bs-dismiss="modal" aria-label="Close" value="Discard"/>
+                            <input type="submit" value="Update Student" class="btn btn-dark border-2 btn-sm shadow-none">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Student Modal -->
+    <div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <a class="navbar-brand text-center fs-2 my-3" style="font-family: 'Oleo Script Swash Caps', cursive;"
+                   href="/"><i class="fa-solid fa-cookie-bite"></i> HomeChef</a>
+                <br>
+                <i class="fa-solid fa-xmark text-danger mt-3 fa-2xl"></i>
+                <div class="modal-header border-0 mx-auto m-0 p-0">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel">Confirm delete this student?</h5>
+                </div>
+                <div class="p-3 w-100 text-end">
+                    <button class="btn btn-white btn-sm shadow-0 border border-dark border-2"
+                            data-bs-dismiss="modal" aria-label="Close">Discard
+                    </button>
+                    <a href="" id="delete_student"
+                       class="btn btn-danger border-2 border-danger btn-sm shadow-none">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6>All Students</h6>
+            <button class="btn btn-sm btn-dark shadow-none border-0" data-bs-toggle="modal"
+                    data-bs-target="#addStudentModal">Add New
+            </button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date Joined</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for student in students %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="{% url 'profile'%}?user_id={{student.id}}" target="_blank" class="text-dark">{{ student.username }}</a></td>
+                    <td>{% if student.email %}
+                        {{ student.email }}
+                    {% else %}
+                        <td>Not Added Yet</td>
+                    {% endif %}
+                    </td>
+                    <td>{{ student.date_joined }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-white border-2 border-dark shadow-none"
+                                data-student-id="{{ student.id }}"
+                                data-student-username="{{ student.username }}"
+                                data-student-email="{{ student.email }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#updateStudentModal"
+                        ><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-dark border-2 border-dark shadow-none" data-bs-toggle="modal"
+                                data-bs-target="#deleteStudentModal"
+                                data-student-id="{{ student.id }}">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+        $("#updateStudentModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("student-id"); // Extract info from data-* attributes
+            const username = button.data("student-username");
+            const email = button.data("student-email");
+            const modal = $(this);
+            modal.find("#username").attr("value", username);
+            modal.find("#email").attr("value", email);
+            modal.find("#update_student").attr("action", "/update-student/?student_id=" + id);
+        });
+    </script>
+    <script>
+        $("#deleteStudentModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data("student-id");
+            const modal = $(this);
+            modal.find("#delete_student").attr("href", "/delete-student/?student_id=" + id)
+        })
+    </script>
+{% endblock %}
